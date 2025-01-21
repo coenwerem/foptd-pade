@@ -1,4 +1,6 @@
-This repo is a collection of MATLAB scripts for studying the control of time-delayed first-order processes approximated by the Padé function. An accompanying paper is available on (arXiV)[https://arxiv.org/abs/2210.08187]. If you find the scripts useful in your work, kindly cite us via the following bib entry:
+This repo is a collection of MATLAB scripts for studying the control of time-delayed first-order processes approximated by the Padé function. An accompanying paper is available on (arXiV)[https://arxiv.org/abs/2210.08187]. 
+
+If you find the scripts useful in your work, kindly cite us via the following bib entry:
 
 ```
 @online{enweremOptimalControllerTuning2023,
