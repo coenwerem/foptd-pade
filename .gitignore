@@ -1,0 +1,13 @@
+# Generated artifacts --- regenerate by running scripts/
+figures/
+tables/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+venv/
