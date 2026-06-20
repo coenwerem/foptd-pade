@@ -30,9 +30,9 @@ def main() -> None:
         (7.8, 100.0),
     ]
     fig, axes = new_figure(
-        nrows=2, ncols=2, figsize=(11.0, 7.5),
-        left=0.09, right=0.98, bottom=0.10, top=0.94,
-        wspace=0.22, hspace=0.45,
+        nrows=2, ncols=2, figsize=(12.0, 8.5),
+        left=0.10, right=0.985, bottom=0.10, top=0.94,
+        wspace=0.32, hspace=0.55,
     )
     for ax, (K, t_final) in zip(sum(axes, []), cases):
         t, y = _step(K, t_final)
