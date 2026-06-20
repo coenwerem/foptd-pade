@@ -6,10 +6,9 @@ K = 7.8 is just outside the stability interval (-1, 7.67) --- expect divergence.
 from __future__ import annotations
 
 import control as ct
-import matplotlib.pyplot as plt
 import numpy as np
 
-from _common import configure_mpl, fig_path  # noqa: E402
+from _common import configure_mpl, new_figure, save_figure  # noqa: E402
 
 from foptd_pade.plant import case1_closed_loop_p_only
 from foptd_pade.tuning import routh_hurwitz_case1
@@ -30,18 +29,21 @@ def main() -> None:
         (ku, 4.0),
         (7.8, 100.0),
     ]
-    fig, axes = plt.subplots(2, 2, figsize=(9.0, 6.0))
-    for ax, (K, t_final) in zip(axes.flat, cases):
+    fig, axes = new_figure(
+        nrows=2, ncols=2, figsize=(11.0, 7.5),
+        left=0.09, right=0.98, bottom=0.10, top=0.94,
+        wspace=0.22, hspace=0.45,
+    )
+    for ax, (K, t_final) in zip(sum(axes, []), cases):
         t, y = _step(K, t_final)
-        ax.plot(t, y)
+        ax.plot(t, y, color="tab:blue")
+        ax.grid(True)
+        # per-panel labels (paper Fig. 5 shows these)
         ax.set_title(f"K = {K:.2f}" if K != ku else "K = 7.67")
         ax.set_xlabel("Time (seconds)")
         ax.set_ylabel("Amplitude")
-    fig.suptitle("Closed-loop step response of the FOPTD model (Case 1)")
-    fig.tight_layout()
-    out = fig_path("fig05_case1_gain_sweep.png")
-    fig.savefig(out)
-    print(f"wrote {out}")
+    png, pdf = save_figure(fig, "fig05_case1_gain_sweep")
+    print(f"wrote {png}\nwrote {pdf}")
 
 
 if __name__ == "__main__":

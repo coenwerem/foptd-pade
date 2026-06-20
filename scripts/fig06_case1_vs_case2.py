@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import control as ct
-import matplotlib.pyplot as plt
 import numpy as np
 
-from _common import configure_mpl, fig_path  # noqa: E402
+from _common import configure_mpl, new_figure, save_figure  # noqa: E402
 
 from foptd_pade.plant import case1_closed_loop_pid, true_plant_pid_closed_loop
 from foptd_pade.tuning import (
@@ -31,18 +30,16 @@ def main() -> None:
     _, y1 = ct.step_response(cl_case1, T=t)
     _, y2 = ct.step_response(cl_case2, T=t)
 
-    fig, ax = plt.subplots()
+    fig, ax = new_figure(figsize=(8.0, 4.8), top=0.97, bottom=0.15)
     ax.plot(t, y1, color="tab:red", label="Case 1 (Pade approx.)")
     ax.plot(t, y2, color="k", ls="-.", label="Case 2 (delay retained)")
     ax.axhline(1.0, color="k", lw=0.5, alpha=0.5)
+    ax.grid(True)
     ax.set_xlabel("Time (seconds)")
     ax.set_ylabel("Output Response")
-    ax.set_title("Case 1 vs Case 2 closed-loop step response")
     ax.legend()
-    fig.tight_layout()
-    out = fig_path("fig06_case1_vs_case2.png")
-    fig.savefig(out)
-    print(f"wrote {out}")
+    png, pdf = save_figure(fig, "fig06_case1_vs_case2")
+    print(f"wrote {png}\nwrote {pdf}")
 
 
 if __name__ == "__main__":

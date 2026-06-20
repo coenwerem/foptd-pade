@@ -10,11 +10,18 @@ Run:
 
 from __future__ import annotations
 
+import sys
 import warnings
+from pathlib import Path
+
+# Reuse the scripts/ matplotlib helpers without renaming files.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "scripts"))
 
 import control as ct
 import matplotlib.pyplot as plt
 import numpy as np
+
+from _common import configure_mpl, new_figure, save_figure  # noqa: E402
 
 from foptd_pade.metrics import step_metrics
 from foptd_pade.plant import (
@@ -41,6 +48,7 @@ def _row(name, kp, ki, kd, m):
 
 def main() -> None:
     warnings.filterwarnings("ignore")
+    configure_mpl()
 
     print(f"\nFOPTD plant:  G(s) = e^(-{THETA}s) / ({TAU}s + 1)\n")
 
@@ -84,24 +92,24 @@ def main() -> None:
 
     # Comparative step plot
     t = np.linspace(0.0, 10.0, 8001)
-    fig, ax = plt.subplots(figsize=(8.0, 4.8))
+    fig, ax = new_figure(figsize=(9.0, 5.2), top=0.97, bottom=0.13)
     for cl, label, style in [
         (cl_sit, "SIMC-PI ($\\tau_c = \\theta$)",     {"ls": "--", "color": "tab:red"}),
         (cl_sis, "SIMC-PI ($\\tau_c = 1.5\\theta$)",  {"ls": "-.", "color": "tab:cyan"}),
-        (cl_imc, "IMC-PI",                            {"ls": ":",  "color": "k"}),
-        (cl_zn,  "Z-N with Padé approx.",        {"ls": "-",  "color": "tab:purple"}),
+        (cl_imc, "IMC-PI",                            {"ls": ":",  "color": "k", "lw": 2.0}),
+        (cl_zn,  "Z-N with Padé approx.",             {"ls": "-",  "color": "tab:purple"}),
     ]:
         _, y = ct.step_response(cl, T=t)
         ax.plot(t, y, label=label, **style)
     ax.axhline(1.0, color="k", lw=0.4, alpha=0.4)
-    ax.grid(alpha=0.3)
+    ax.grid(True)
     ax.set_xlabel("Time (seconds)")
     ax.set_ylabel("Output Response")
-    ax.set_title("FOPTD closed-loop step response --- controller comparison (demo)")
     ax.legend(loc="lower right")
-    fig.tight_layout()
 
-    print("\nclose the plot window to exit.")
+    png, pdf = save_figure(fig, "demo_controller_comparison")
+    print(f"\nwrote {png}\nwrote {pdf}")
+    print("close the plot window to exit.")
     plt.show()
 
 

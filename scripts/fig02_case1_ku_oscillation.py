@@ -7,10 +7,9 @@ Expected: sustained oscillation of constant amplitude.
 from __future__ import annotations
 
 import control as ct
-import matplotlib.pyplot as plt
 import numpy as np
 
-from _common import configure_mpl, fig_path  # noqa: E402
+from _common import configure_mpl, new_figure, save_figure  # noqa: E402
 
 from foptd_pade.plant import case1_closed_loop_p_only
 from foptd_pade.tuning import routh_hurwitz_case1
@@ -23,17 +22,15 @@ def main() -> None:
     t = np.linspace(0.0, 5.0, 4001)
     t_out, y = ct.step_response(sys, T=t)
 
-    fig, ax = plt.subplots()
+    fig, ax = new_figure(figsize=(7.0, 4.5), top=0.97, bottom=0.16)
     ax.plot(t_out, y, color="tab:blue")
     ax.axhline(1.0, color="k", lw=0.6, ls="--", alpha=0.5)
+    ax.grid(True)
     ax.set_xlabel("Time [s]")
     ax.set_ylabel("Output Response")
-    ax.set_title(f"Case 1: sustained oscillation at K = $k_u$ = {ku:.2f}")
     ax.set_xlim(0, 5)
-    fig.tight_layout()
-    out = fig_path("fig02_case1_ku_oscillation.png")
-    fig.savefig(out)
-    print(f"wrote {out}")
+    png, pdf = save_figure(fig, "fig02_case1_ku_oscillation")
+    print(f"wrote {png}\nwrote {pdf}")
 
 
 if __name__ == "__main__":
