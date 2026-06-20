@@ -36,6 +36,7 @@ def configure_mpl() -> None:
         "axes.spines.top":    True,
         "axes.spines.right":  True,
         "axes.linewidth":     1,
+        "lines.linewidth":    2.0,
         "legend.fontsize":    12,
         "xtick.labelsize":    14,
         "ytick.labelsize":    14,
